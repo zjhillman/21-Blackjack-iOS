@@ -25,27 +25,27 @@ struct StartMenu: View {
                 Spacer()
                 PlayingHandView(handData: titleCards)
                     .offset(y: -50)
-                Spacer()
-                NavigationLink(destination: GameView()) {
+                Button(action: {
+                    print("settings button pressed")
+                }, label: {
+                    Image("settings-button")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding()
+                    
+                    .frame(width: 350)
+                        .offset(y: 55)
+                })
+                NavigationLink(destination: GameView().onAppear {
+                    flipTimer.invalidate()
+                }) {
                     Image("start-button")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .padding()
+                        .frame(width: 350)
                         .offset(y: 30)
                 }
-                .onTapGesture {
-                    stopTimer()
-                }
-//                Button(action: {
-//                    print("You are adopted")
-//                }, label: {
-//                    Image("start-button")
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fit)
-//                       .padding()
-//                })
-//               .offset(y: 40)
-                
             }
             .padding()
             .shadow(radius: 8)
@@ -79,7 +79,7 @@ struct StartMenu: View {
         }
     }
     
-    // timer never stopped because timer var is in a different scope
+    //
     private func stopTimer() {
         flipTimer.invalidate()
     }

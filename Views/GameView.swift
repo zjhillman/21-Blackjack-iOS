@@ -36,23 +36,21 @@ struct GameView: View {
             Spacer()
             
             Button(action: {
-                print("hit me daddy")
                 blackjack.hit()
             }, label: {
                 Image("hit-me-button")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             })
-            .frame(height: 85)
+            .frame(width: 350)
             Button(action: {
-                print("stand on business")
                 blackjack.stand()
             }, label: {
                 Image("stand-button")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             })
-            .frame(height: 85)
+            .frame(width: 350)
         }
         .padding()
         .background(Image("background-cloth")

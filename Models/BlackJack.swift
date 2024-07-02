@@ -106,9 +106,15 @@ class BlackJack: ObservableObject {
     
     func hit() {
         if isGameActive {
-            var card = CardData()
-            playerCards.addCard(cardData: card)
+            playerCards.addCard(cardData: CardData())
             self.score()
+            
+            if self.playerScore > 21 {
+                self.dealerTurn()
+                self.gameEnd()
+            }
+        } else {
+            print("Cannot hit, game is over")
         }
     }
     
@@ -118,8 +124,12 @@ class BlackJack: ObservableObject {
     }
     
     func stand() {
-        dealerTurn()
-        gameEnd()
+        if isGameActive {
+            dealerTurn()
+            gameEnd()
+        } else {
+            print("Cannot do this right now, the game has ended")
+        }
     }
     
     func dealerTurn() {
@@ -129,7 +139,7 @@ class BlackJack: ObservableObject {
     }
     
     func gameEnd() {
-        isGameActive = false
+        self.isGameActive = false
         var message:String = "Game has ended. "
         if self.playerScore > self.dealerScore {
             message += "You have won, congratulations! "
