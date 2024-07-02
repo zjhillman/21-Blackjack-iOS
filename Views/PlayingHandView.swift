@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PlayingHandView: View {
-    var handData: HandData
+    @ObservedObject var handData: HandData
     
     var body: some View {
         HStack{

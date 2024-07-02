@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 class BlackJack: ObservableObject {
-    private var booloon: Bool
+    private var isGameActive: Bool
     
     @Published private var playerCards: HandData
     @Published private var dealerCards: HandData
@@ -17,7 +17,7 @@ class BlackJack: ObservableObject {
     @Published private var dealerScore: Int
     
     init() {
-        booloon = true
+        isGameActive = true
         playerCards = HandData(cards: [
             CardData(DurationAndDelay: 0.20),
             CardData(DurationAndDelay: 0.20)
@@ -55,11 +55,11 @@ class BlackJack: ObservableObject {
     }
     
     func score() {
-        self.playerScore = countCards(cards: playerCards)
-        self.dealerScore = countCards(cards: dealerCards)
+        self.playerScore = getHandScore(cards: playerCards)
+        self.dealerScore = getHandScore(cards: dealerCards)
     }
     
-    func countCards(cards: HandData)->Int {
+    func getHandScore(cards: HandData)->Int {
         var score = 0
         var ace: Bool = false
         
@@ -105,8 +105,9 @@ class BlackJack: ObservableObject {
     }
     
     func hit() {
-        if booloon {
-            playerCards.addCard(cardData: CardData())
+        if isGameActive {
+            var card = CardData()
+            playerCards.addCard(cardData: card)
             self.score()
         }
     }
@@ -128,7 +129,7 @@ class BlackJack: ObservableObject {
     }
     
     func gameEnd() {
-        booloon = false
+        isGameActive = false
         var message:String = "Game has ended. "
         if self.playerScore > self.dealerScore {
             message += "You have won, congratulations! "
