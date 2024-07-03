@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GameView: View {
+    @Binding var background: String
 
     @ObservedObject private var blackjack = BlackJack()
         
@@ -23,7 +24,7 @@ struct GameView: View {
             PlayingHandView(handData: blackjack.getDealerCards())
                 .frame(height: 270)
                 .onAppear {
-                    flipDealerCards()
+                    flipDealerCardsOnViewOpen()
                     blackjack.score()
                 }
             Spacer()
@@ -47,6 +48,7 @@ struct GameView: View {
             .frame(width: 350)
             Button(action: {
                 blackjack.stand()
+                flipCards()
             }, label: {
                 Image("stand-button")
                     .resizable()
@@ -55,13 +57,13 @@ struct GameView: View {
             .frame(width: 350)
         }
         .padding()
-        .background(Image("background-cloth")
+        .background(Image(self.background)
             .resizable()
             .ignoresSafeArea()
         )
     }
     
-    func flipDealerCards() {
+    func flipDealerCardsOnViewOpen() {
         //wait to flip cards until view has taken fullscreen
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
             
@@ -75,9 +77,33 @@ struct GameView: View {
         })
         blackjack.score()
     }
+    
+    func flipCards() {
+        for card in blackjack.getDealerCards().list() {
+            if card.isFaceUp {
+                continue
+            } else {
+                card.flip()
+            }
+        }
+        for card in blackjack.getPlayerCards().list() {
+            if card.isFaceUp {
+                continue
+            } else {
+                card.flip()
+            }
+        }
+    }
 }
 
 #Preview {
-    GameView()
+    struct Preview: View {
+        @State var background = "background-plain"
+        var body: some View {
+            GameView(background: $background)
+        }
+    }
+    
+    return Preview()
 }
 

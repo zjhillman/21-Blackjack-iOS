@@ -11,6 +11,9 @@ private var flipTimer = Timer()
 private var sequenceTimer = Timer()
 
 struct StartMenu: View {
+    @State var background = "background-plain"
+    @State var settingsSheetActive = false
+    
     @StateObject var titleCards = HandData(cards: [
         CardData(),
         CardData()
@@ -29,13 +32,17 @@ struct StartMenu: View {
                 Spacer()
                 Button(action: {
                     print("settings button pressed")
+                    self.settingsSheetActive.toggle()
                 }, label: {
                     Image("settings-button")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 350)
                 })
-                NavigationLink(destination: GameView().onAppear {
+                .sheet(isPresented: $settingsSheetActive, content: {
+                    SettingsSheetView(background: $background)
+                })
+                NavigationLink(destination: GameView(background: $background).onAppear {
                     flipTimer.invalidate()
                 }) {
                     Image("start-button")
@@ -51,7 +58,7 @@ struct StartMenu: View {
                 startTimer()
             }
             .background(
-                Image("background-plain")
+                Image(background)
                     .resizable()
                     .ignoresSafeArea()
         )
