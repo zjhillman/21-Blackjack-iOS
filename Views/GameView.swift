@@ -21,6 +21,7 @@ struct GameView: View {
                 Spacer()
             }
             PlayingHandView(handData: blackjack.getDealerCards())
+                .frame(height: 270)
                 .onAppear {
                     flipDealerCards()
                     blackjack.score()
@@ -33,6 +34,7 @@ struct GameView: View {
                 Spacer()
             }
             PlayingHandView(handData: blackjack.getPlayerCards())
+                .frame(height: 270)
             Spacer()
             
             Button(action: {
@@ -64,7 +66,11 @@ struct GameView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
             
             for card in blackjack.getDealerCards().list() {
-                card.flip()
+                if card.isFaceUp {
+                    continue
+                } else {
+                    card.flip()
+                }
             }
         })
         blackjack.score()

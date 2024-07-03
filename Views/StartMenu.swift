@@ -8,6 +8,7 @@
 import SwiftUI
 
 private var flipTimer = Timer()
+private var sequenceTimer = Timer()
 
 struct StartMenu: View {
     @StateObject var titleCards = HandData(cards: [
@@ -25,16 +26,14 @@ struct StartMenu: View {
                 Spacer()
                 PlayingHandView(handData: titleCards)
                     .offset(y: -50)
+                Spacer()
                 Button(action: {
                     print("settings button pressed")
                 }, label: {
                     Image("settings-button")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .padding()
-                    
-                    .frame(width: 350)
-                        .offset(y: 55)
+                        .frame(width: 350)
                 })
                 NavigationLink(destination: GameView().onAppear {
                     flipTimer.invalidate()
@@ -42,14 +41,13 @@ struct StartMenu: View {
                     Image("start-button")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .padding()
                         .frame(width: 350)
-                        .offset(y: 30)
                 }
             }
             .padding()
             .shadow(radius: 8)
             .onAppear {
+                flipSequentially()
                 startTimer()
             }
             .background(
@@ -61,7 +59,7 @@ struct StartMenu: View {
     }
     
     private func startTimer() {
-        flipTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { timer in
+        flipTimer = Timer.scheduledTimer(withTimeInterval: 4.0, repeats: true) { timer in
             print("Timer Fired")
             
             let random = Int.random(in: 0..<titleCards.list().count)
@@ -77,6 +75,13 @@ struct StartMenu: View {
                 }
             })
         }
+    }
+    
+    func flipSequentially() {
+        titleCards.at(index: 0).flip()
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.3, execute: {
+            titleCards.at(index: 1).flip()
+        })
     }
     
     //
