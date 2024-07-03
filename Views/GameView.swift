@@ -56,6 +56,7 @@ struct GameView: View {
             })
             .frame(width: 350)
         }
+        .shadow(radius: 10)
         .padding()
         .background(Image(self.background)
             .resizable()
